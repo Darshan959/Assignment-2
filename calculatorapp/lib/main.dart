@@ -31,7 +31,6 @@ class _CalculatorHomeState extends State<CalculatorHome> {
   void _buttonPressed(String buttonText) {
     setState(() {
       if (buttonText == "C") {
-        // Clear button resets the calculator
         _output = "0";
         _operand = "";
         _num1 = 0.0;
@@ -40,15 +39,12 @@ class _CalculatorHomeState extends State<CalculatorHome> {
           buttonText == "-" ||
           buttonText == "*" ||
           buttonText == "/") {
-        // Operator button is pressed, store the first number and the operator
         _num1 = double.parse(_output);
         _operand = buttonText;
-        _output = "0"; // Reset display for second number
+        _output = "0";
       } else if (buttonText == "=") {
-        // Equals button calculates the result
         _num2 = double.parse(_output);
 
-        // Perform the operation based on the operand
         switch (_operand) {
           case "+":
             _output = (_num1 + _num2).toString();
@@ -63,13 +59,12 @@ class _CalculatorHomeState extends State<CalculatorHome> {
             if (_num2 != 0) {
               _output = (_num1 / _num2).toString();
             } else {
-              _output = "Error"; // Handle division by zero
+              _output = "Error";
             }
             break;
         }
-        _operand = ""; // Reset the operator
+        _operand = "";
       } else {
-        // Handle numbers and decimal point input
         if (_output == "0") {
           _output = buttonText;
         } else {
@@ -79,21 +74,23 @@ class _CalculatorHomeState extends State<CalculatorHome> {
     });
   }
 
-  // Function to create calculator buttons
-  Widget _buildButton(String buttonText) {
+  // Function to create calculator buttons with basic styling
+  Widget _buildButton(String buttonText, {Color? color}) {
     return Expanded(
-      child: InkWell(
-        onTap: () => _buttonPressed(buttonText),
-        child: Container(
-          height: 80.0,
-          child: Center(
-            child: Text(
-              buttonText,
-              style: TextStyle(fontSize: 24.0),
-            ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: () => _buttonPressed(buttonText),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: color ?? Colors.grey[300],
+            padding: EdgeInsets.all(20),
           ),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
+          child: Text(
+            buttonText,
+            style: TextStyle(
+              fontSize: 24.0,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
@@ -104,23 +101,26 @@ class _CalculatorHomeState extends State<CalculatorHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calculator'),
+        title: Text('Basic Calculator'),
       ),
       body: Column(
         children: <Widget>[
           // Display area
           Container(
-            padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 12.0),
+            padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 12.0),
             alignment: Alignment.centerRight,
             child: Text(
               _output,
-              style: TextStyle(fontSize: 48.0, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 48.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
           ),
           Expanded(
             child: Divider(),
           ),
-          // Button layout
           Column(
             children: [
               Row(
@@ -128,7 +128,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
                   _buildButton("7"),
                   _buildButton("8"),
                   _buildButton("9"),
-                  _buildButton("/"),
+                  _buildButton("/", color: Colors.blueGrey),
                 ],
               ),
               Row(
@@ -136,7 +136,7 @@ class _CalculatorHomeState extends State<CalculatorHome> {
                   _buildButton("4"),
                   _buildButton("5"),
                   _buildButton("6"),
-                  _buildButton("*"),
+                  _buildButton("*", color: Colors.blueGrey),
                 ],
               ),
               Row(
@@ -144,20 +144,20 @@ class _CalculatorHomeState extends State<CalculatorHome> {
                   _buildButton("1"),
                   _buildButton("2"),
                   _buildButton("3"),
-                  _buildButton("-"),
+                  _buildButton("-", color: Colors.blueGrey),
                 ],
               ),
               Row(
                 children: <Widget>[
                   _buildButton("."),
                   _buildButton("0"),
-                  _buildButton("+"),
+                  _buildButton("=", color: Colors.greenAccent),
+                  _buildButton("+", color: Colors.blueGrey),
                 ],
               ),
               Row(
                 children: <Widget>[
-                  _buildButton("C"),
-                  _buildButton("="),
+                  _buildButton("C", color: Colors.redAccent),
                 ],
               ),
             ],
